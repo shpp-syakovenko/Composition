@@ -7,26 +7,66 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.serglife.composition.R
 import com.serglife.composition.databinding.FragmentChooseLevelBinding
+import com.serglife.composition.domain.entity.Level
 
-class ChooseLevelFragment: Fragment() {
+class ChooseLevelFragment : Fragment() {
+
     private var _binding: FragmentChooseLevelBinding? = null
     private val binding: FragmentChooseLevelBinding
-    get() = _binding ?: throw RuntimeException("FragmentChooseLevelBinding == null")
+        get() = _binding ?: throw RuntimeException("FragmentChooseLevelBinding == null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return FragmentChooseLevelBinding.inflate(inflater, container,false).also { _binding = it }.root
+        return FragmentChooseLevelBinding.inflate(inflater, container, false)
+            .also { _binding = it }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupListenerOnButtonOfLevel()
+    }
+
+    private fun setupListenerOnButtonOfLevel() {
+        with(binding) {
+            buttonLevelTest.setOnClickListener {
+                launchGameFragment(Level.TEST)
+            }
+
+            buttonLevelEasy.setOnClickListener {
+                launchGameFragment(Level.EASY)
+            }
+
+            buttonLevelNormal.setOnClickListener {
+                launchGameFragment(Level.NORMAL)
+            }
+
+            buttonLevelHard.setOnClickListener {
+                launchGameFragment(Level.HARD)
+            }
+        }
+    }
+
+    private fun launchGameFragment(level: Level) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, GameFragment.newInstance(level))
+            .addToBackStack(GameFragment.NAME)
+            .commit()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+
+        const val NAME = "ChooseLevelFragment"
+
+        fun newInstance(): ChooseLevelFragment {
+            return ChooseLevelFragment()
+        }
     }
 }
