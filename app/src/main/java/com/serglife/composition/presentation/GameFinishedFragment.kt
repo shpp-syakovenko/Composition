@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.serglife.composition.R
 import com.serglife.composition.databinding.FragmentGameFinishedBinding
 
 class GameFinishedFragment : Fragment() {
@@ -34,48 +33,12 @@ class GameFinishedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupClickListener()
-        bindViews()
+        binding.gameResult = args.result
     }
 
     private fun setupClickListener() {
         binding.buttonRetry.setOnClickListener {
             retryGame()
-        }
-    }
-
-    private fun bindViews() {
-        binding.emojiResult.setImageResource(getSmileResId())
-        binding.tvRequiredAnswers.text = String.format(
-            getString(R.string.required_score),
-            args.result.gameSettings.minCountOfRightAnswer
-        )
-        binding.tvScoreAnswers.text = String.format(
-            getString(R.string.score_answers),
-            args.result.countOfRightAnswers
-        )
-        binding.tvRequiredPercentage.text = String.format(
-            getString(R.string.required_percentage),
-            args.result.gameSettings.minPercentOfRightAnswer
-        )
-        binding.tvScorePercentage.text = String.format(
-            getString(R.string.score_percentage),
-            getPercentOfRightAnswers()
-        )
-    }
-
-    private fun getPercentOfRightAnswers() = with(args.result) {
-        if (countOfQuestions == 0) {
-            0
-        } else {
-            ((countOfRightAnswers / countOfQuestions.toDouble()) * 100).toInt()
-        }
-    }
-
-    private fun getSmileResId(): Int {
-        return if (args.result.winner) {
-            R.drawable.ic_smile
-        } else {
-            R.drawable.ic_sad
         }
     }
 
